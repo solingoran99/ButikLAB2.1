@@ -163,7 +163,10 @@
 				}
 				else
 				{
+					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine("Please enter a valid number from the list or type 'exit' to go back.");
+					Console.ResetColor();
+					System.Threading.Thread.Sleep(1000);
 				}
 
 			}
