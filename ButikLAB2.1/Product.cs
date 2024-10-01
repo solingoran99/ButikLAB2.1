@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ButikLAB2._1
 {
-	internal class Product
+	public class Product
 	{
 		public string Name { get; set; }
 		public string Description { get; set; }

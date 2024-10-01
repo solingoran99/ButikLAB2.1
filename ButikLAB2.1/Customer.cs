@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace ButikLAB2._1
 {
-	internal class Customer
+	public class Customer
 	{
 		private string _name;
 		private string _Password;
 
 		//Cart property
 
-		private List<Product> _cart;
-		public List<Product> Cart { get { return _cart; } }
+		private List<CartItem> _cart;
+		public List<CartItem> Cart { get { return _cart; } }
 
 
 		public Customer(string name, string password)
 		{
 			Name = name;
 			Password = password;
-			_cart = new List<Product>();
+			_cart = new List<CartItem>();
 		}
 
 		public string Name
@@ -73,7 +73,8 @@ namespace ButikLAB2._1
 			}
 		}
 
-		public static void registerCustomer(List<Customer> customers)
+		//Method to register a customer
+		public static void RegisterCustomer(List<Customer> customers)
 		{
 			Console.ForegroundColor = ConsoleColor.Magenta;
 			Console.WriteLine("Lush Locks");
@@ -102,9 +103,9 @@ namespace ButikLAB2._1
 			}
 			else
 			{
-				foreach (var product in Cart)
+				foreach (var cartItem in Cart)
 				{
-					Console.WriteLine($"-{product.Name}: {product.Price}kr");
+					Console.WriteLine($"-{cartItem.Product.Name}: {cartItem.Quantity}x ({cartItem.Product.Price:F2}Kr per item) = {cartItem.TotalItemPrice():F2}Kr");
 				}
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine($"\nTotal Price: {TotalPrice()}kr");
@@ -120,12 +121,102 @@ namespace ButikLAB2._1
 		{
 			double totalPrice = 0;
 
-			foreach (var product in Cart)
+			foreach (var cartItem in Cart)
 			{
-				totalPrice += product.Price;
+				totalPrice += cartItem.TotalItemPrice();
 			}
 			return totalPrice;
 		}
+
+		public void UpdateCart(Product product)
+		{
+			var existingItem = Cart.Find(item =>item.Product.Name == product.Name);
+
+			if (existingItem != null)
+			{
+				existingItem.Quantity++;
+			}
+			else
+			{
+				Cart.Add(new CartItem(product, 1));
+			}
+		}
+
+		//CheckOut method
+
+		public void CheckOut()
+		{
+			Console.Clear();
+			Console.ForegroundColor= ConsoleColor.Magenta;
+            Console.WriteLine("Lush Locks - Checkout");
+			Console.ResetColor();
+
+			
+
+			if (Cart.Count == 0)
+			{
+                Console.WriteLine("Your cart is empty.\nPress enter to go back to the menu.");
+				Console.ReadKey();
+				return;
+            }
+
+			Console.WriteLine(this.ToString());
+
+			double totalPrice = TotalPrice();
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine($"\nTotal Price: {totalPrice}Kr");
+			Console.ResetColor();
+
+			string confirmation;
+
+			do
+			{
+				Console.WriteLine("Do you want to confirm the purchase? (yes/no)");
+				confirmation = Console.ReadLine().ToLower().Trim();
+			}
+			while( confirmation != "yes" && confirmation != "no" );
+
+           
+			if(confirmation == "yes")
+			{
+				Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Thank you for shopping with Lush Lucks!");
+				Console.ResetColor();
+				Cart.Clear();
+            }
+			else
+			{
+                Console.WriteLine("Your purchase was cancelled.");
+            }
+
+            Console.WriteLine("Press enter to go back to the menu.");
+			Console.ReadKey();
+        }
+
+		//ToString() Method
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine($"Name: {Name}");
+			sb.AppendLine($"Password: {Password}");
+			sb.AppendLine("Shopping Cart:");
+
+			if (Cart.Count == 0)
+			{
+				sb.AppendLine("Your cart is empty.");
+			}
+			else
+			{
+				foreach (var cartItem in Cart)
+				{
+					sb.AppendLine($"- {cartItem.Product.Name}: {cartItem.Quantity}X ({cartItem.Product.Price:F2}Kr per item) = {cartItem.TotalItemPrice():F2}Kr");
+				}
+			}
+			return sb.ToString();
+
+            
+        }
 
 
 	}

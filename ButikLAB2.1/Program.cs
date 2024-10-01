@@ -56,7 +56,7 @@
 						case 2:
 							Console.Clear();
 							//Call registeration method
-							Customer.registerCustomer(customers);
+							Customer.RegisterCustomer(customers);
 							Console.WriteLine("Press enter to go back to the menu");
 							Console.ReadKey();
 							break;
@@ -108,7 +108,7 @@
 							break;
 
 						case 3:
-							Console.WriteLine("checkout");
+							customer.CheckOut();
 							break;
 
 						case 4:
@@ -154,19 +154,19 @@
 				else if (int.TryParse(productInput, out productNumber) && productNumber > 0 && productNumber <= products.Count)
 				{
 					Product selectedProduct = products[productNumber - 1];
-					customer.Cart.Add(selectedProduct);
+					customer.UpdateCart(selectedProduct); 
 					Console.ForegroundColor = ConsoleColor.Green;
 					Console.WriteLine($"\n{selectedProduct.Name} has been added to your cart.");
 					Console.ResetColor();
 
-					System.Threading.Thread.Sleep(1000);
+					System.Threading.Thread.Sleep(1500);
 				}
 				else
 				{
 					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine("Please enter a valid number from the list or type 'exit' to go back.");
 					Console.ResetColor();
-					System.Threading.Thread.Sleep(1000);
+					System.Threading.Thread.Sleep(1500);
 				}
 
 			}
