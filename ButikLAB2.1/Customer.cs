@@ -74,7 +74,7 @@ namespace ButikLAB2._1
 		}
 
 		//Method to register a customer
-		public static void RegisterCustomer(List<Customer> customers)
+		public static void RegisterCustomer(List<Customer> customers, List<Product>products)
 		{
 			Console.ForegroundColor = ConsoleColor.Magenta;
 			Console.WriteLine("Lush Locks");
@@ -86,7 +86,9 @@ namespace ButikLAB2._1
 			string userPassword = Console.ReadLine();
 
 			customers.Add(new Customer(userName, userPassword));
-			Console.WriteLine("Successfully registered, log in to get started!");
+			Console.WriteLine("Successfully registered! Press enter to go back to the main menu.");
+			Console.ReadKey();
+
 		}
 
 		//Cart view method

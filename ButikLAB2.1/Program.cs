@@ -1,6 +1,6 @@
 ﻿namespace ButikLAB2._1
 {
-	internal class Program
+	public class Program
 	{
 		static void Main(string[] args)
 		{
@@ -39,7 +39,7 @@
 
 
 				if (int.TryParse(userInput, out userChoice))
-				{    // handle user choice
+				{    
 					switch (userChoice)
 					{
 						case 1:
@@ -50,19 +50,13 @@
 							{
 								ShoppingMenu(loggedInCustomer, products);
 							}
-							Console.WriteLine("Press enter to go back to the menu");
-							Console.ReadKey();
 							break;
 						case 2:
 							Console.Clear();
-							//Call registeration method
-							Customer.RegisterCustomer(customers);
-							Console.WriteLine("Press enter to go back to the menu");
-							Console.ReadKey();
+							Customer.RegisterCustomer(customers, products);
 							break;
 						case 3:
 							Console.WriteLine("Thank you for your visit!");
-							//set to false and break the loop
 							running = false;
 							break;
 						default:
@@ -70,6 +64,8 @@
 							break;
 
 					}
+
+					
 				}
 				else
 				{
@@ -81,8 +77,8 @@
 			}
 
 		}
-		//Shopping method menu
-		static void ShoppingMenu(Customer customer, List<Product> products)
+		//Shopping menu method
+		public static void ShoppingMenu(Customer customer, List<Product> products)
 		{
 			bool shopping = true;
 
@@ -130,7 +126,7 @@
 		}
 
 		//LOOP for shoppinng
-		static void ShoppingLoop(Customer customer, List<Product> products)
+		public static void ShoppingLoop(Customer customer, List<Product> products)
 		{
 			bool continueShopping = true;
 
