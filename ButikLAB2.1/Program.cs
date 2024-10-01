@@ -94,49 +94,13 @@
 				Console.ResetColor();
 				Console.WriteLine("1.Shop\n2.View Cart\n3.Check Out\n4.Log Out");
 
-				string shoppingInput = Console.ReadLine();
-				int shoppingChoice;
 
-				if (int.TryParse(shoppingInput, out shoppingChoice))
+				if (int.TryParse(Console.ReadLine(), out int shoppingChoice))
 				{
 					switch (shoppingChoice)
 					{
 						case 1:
-							Console.Clear();
-							Console.ForegroundColor= ConsoleColor.Magenta;
-                            Console.WriteLine("Lush Locks");
-							Console.ResetColor();
-                            Product.DisplayProducts(products);
-							bool continueShopping = true;							
-							while (continueShopping)
-							{
-								
-								Console.WriteLine("\nEnter the number of the product to add to your cart:\nType 'exit' to stop shopping.");
-								string productInput = Console.ReadLine();
-
-								if (productInput.Trim().ToLower().Equals("exit", StringComparison.OrdinalIgnoreCase))
-								{
-									continueShopping = false;
-									break;
-								}
-
-								int productNumber;
-
-								if (int.TryParse(productInput, out productNumber) && productNumber > 0 && productNumber <= products.Count)
-								{
-									Product selectedProduct = products[productNumber - 1];
-									customer.Cart.Add(selectedProduct);
-                                    Console.WriteLine($"\n{selectedProduct.Name} has been added to your cart.");
-                                }
-
-								else
-								{
-									Console.WriteLine("Please enter a number from the list or type 'exit' to go back.");
-								}
-
-							
-
-							}
+							ShoppingLoop(customer, products);
 							break;
 
 						case 2:
@@ -164,5 +128,47 @@
 				}
 			}
 		}
+
+		//LOOP for shoppinng
+		static void ShoppingLoop(Customer customer, List<Product> products)
+		{
+			bool continueShopping = true;
+
+			while (continueShopping)
+			{
+				Console.Clear();
+				Console.ForegroundColor = ConsoleColor.Magenta;
+				Console.WriteLine("Lush Locks");
+				Console.ResetColor();
+				Product.DisplayProducts(products);
+
+				Console.WriteLine("\nEnter the number of the product to add to your cart:\nType 'exit' to stop shopping.");
+				string productInput = Console.ReadLine();
+				int productNumber;
+
+				if (productInput.Trim().ToLower().Equals("exit", StringComparison.OrdinalIgnoreCase))
+				{
+					continueShopping = false; 
+				}
+
+				else if (int.TryParse(productInput, out productNumber) && productNumber > 0 && productNumber <= products.Count)
+				{
+					Product selectedProduct = products[productNumber - 1];
+					customer.Cart.Add(selectedProduct);
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.WriteLine($"\n{selectedProduct.Name} has been added to your cart.");
+					Console.ResetColor();
+
+					System.Threading.Thread.Sleep(1000);
+				}
+				else
+				{
+					Console.WriteLine("Please enter a valid number from the list or type 'exit' to go back.");
+				}
+
+			}
+		}
 	}
 }
+
+
