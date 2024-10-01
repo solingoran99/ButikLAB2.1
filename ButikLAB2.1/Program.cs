@@ -81,12 +81,10 @@
 			}
 
 		}
-
+		//Shopping method menu
 		static void ShoppingMenu(Customer customer, List<Product> products)
 		{
 			bool shopping = true;
-
-			//Shopping menu
 
 			while (shopping)
 			{
@@ -95,6 +93,7 @@
 				Console.WriteLine("Lush Locks");
 				Console.ResetColor();
 				Console.WriteLine("1.Shop\n2.View Cart\n3.Check Out\n4.Log Out");
+
 				string shoppingInput = Console.ReadLine();
 				int shoppingChoice;
 
@@ -103,16 +102,16 @@
 					switch (shoppingChoice)
 					{
 						case 1:
-							bool continueShopping = true;
+							Console.Clear();
+							Console.ForegroundColor= ConsoleColor.Magenta;
+                            Console.WriteLine("Lush Locks");
+							Console.ResetColor();
+                            Product.DisplayProducts(products);
+							bool continueShopping = true;							
 							while (continueShopping)
 							{
-								Console.Clear();
-								Console.ForegroundColor = ConsoleColor.Magenta;
-								Console.WriteLine("Lush Locks");
-								Console.ResetColor();
-
-								Product.DisplayProducts(products);
-								Console.WriteLine("\nEnter the name of the product to add to your cart:\nType 'exit' to stop shopping.");
+								
+								Console.WriteLine("\nEnter the number of the product to add to your cart:\nType 'exit' to stop shopping.");
 								string productInput = Console.ReadLine();
 
 								if (productInput.Trim().ToLower().Equals("exit", StringComparison.OrdinalIgnoreCase))
@@ -121,19 +120,21 @@
 									break;
 								}
 
-								Product selectedProduct = products.Find(p => p.Name.Equals(productInput.ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
-								if (selectedProduct != null)
+								int productNumber;
+
+								if (int.TryParse(productInput, out productNumber) && productNumber > 0 && productNumber <= products.Count)
 								{
+									Product selectedProduct = products[productNumber - 1];
 									customer.Cart.Add(selectedProduct);
-									Console.WriteLine($"\n{selectedProduct.Name} has been added to your cart.");
-								}
+                                    Console.WriteLine($"\n{selectedProduct.Name} has been added to your cart.");
+                                }
+
 								else
 								{
-									Console.WriteLine("Product wasn't found");
+									Console.WriteLine("Please enter a number from the list or type 'exit' to go back.");
 								}
 
-								Console.WriteLine("Press enter to continue shopping or type 'exit' to go back to the menu:");
-								Console.ReadKey();
+							
 
 							}
 							break;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,14 +24,14 @@ namespace ButikLAB2._1
 
 		public static void DisplayProducts(List<Product> products)
 		{
-			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Magenta;
-			Console.WriteLine("Lush Locks\nOur products:");
+			Console.WriteLine("Our products:");
 			Console.ResetColor();
-			foreach (var product in products)
+			
+			for (int i  = 0; i < products.Count; i++)
 			{
-				Console.WriteLine($"-{product.Name}: {product.Description} (Price: {product.Price}kr)");
-			}
+                Console.WriteLine($"{i+1}. {products[i].Name}: {products[i].Description} (Price:){products[i].Price}Kr");
+            }
 		}
 	}
 }
