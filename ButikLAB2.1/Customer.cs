@@ -9,7 +9,7 @@ namespace ButikLAB2._1
 {
 	public enum MembershipLevel
 	{
-		None,
+		Zero,
 		Bronze,
 		Silver,
 		Gold
@@ -208,7 +208,7 @@ namespace ButikLAB2._1
 			}
 			else
 			{
-				Level = MembershipLevel.None;
+				Level = MembershipLevel.Zero;
 			}
 		}
 

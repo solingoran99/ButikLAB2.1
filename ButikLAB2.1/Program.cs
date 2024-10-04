@@ -17,9 +17,9 @@
 			// list of customers
 			List<Customer> customers = new List<Customer>
 			{
-				new Customer("Knatte", "123"),
-				new Customer("Fnatte", "321"),
-				new Customer("Tjatte", "213")
+				new Customer("Knatte", "123", points: 150),
+				new Customer("Fnatte", "321", points: 260),
+				new Customer("Tjatte", "213", points: 540)
 			};
 
 
