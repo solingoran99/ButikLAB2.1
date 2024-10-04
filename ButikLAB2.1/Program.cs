@@ -44,7 +44,6 @@
 					{
 						case 1:
 							Console.Clear();
-							//call login method
 							loggedInCustomer = Customer.Login(customers);
 							if (loggedInCustomer != null)
 							{
@@ -56,23 +55,18 @@
 							Customer.RegisterCustomer(customers, products);
 							break;
 						case 3:
-							Console.WriteLine("Thank you for your visit!");
 							running = false;
 							break;
 						default:
 							Console.WriteLine("Invalid choice. Choose 1, 2 or 3.");
 							break;
-
 					}
-
 					
 				}
 				else
 				{
 					Console.WriteLine("OOPS error! Please enter a number.");
 				}
-
-
 
 			}
 

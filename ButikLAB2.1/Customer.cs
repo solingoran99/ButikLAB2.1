@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace ButikLAB2._1
 {
+	public enum MembershipLevel
+	{
+		Bronze,
+		Silver,
+		Gold
+	}
 	public class Customer
 	{
 		private string _name;
@@ -16,12 +22,19 @@ namespace ButikLAB2._1
 		private List<CartItem> _cart;
 		public List<CartItem> Cart { get { return _cart; } }
 
+		public MembershipLevel Level { get; private set; }
+		public int Points { get; private set; }
 
-		public Customer(string name, string password)
+
+
+
+		public Customer(string name, string password, MembershipLevel level = MembershipLevel.Bronze, int points = 0)
 		{
 			Name = name;
 			Password = password;
 			_cart = new List<CartItem>();
+			Level = level;
+			Points = points;
 		}
 
 		public string Name
@@ -127,9 +140,28 @@ namespace ButikLAB2._1
 			{
 				totalPrice += cartItem.TotalItemPrice();
 			}
-			return totalPrice;
+
+			double discount = 0;
+
+			switch (Level)
+			{
+				case MembershipLevel.Gold:
+					discount = 0.15;
+					break;
+				case MembershipLevel.Silver:
+					discount = 0.10;
+				    break;
+				case MembershipLevel.Bronze:
+					discount = 0.05;
+					break;
+				default:
+					discount = 0.0;
+					break;
+			}
+			return totalPrice * (1 - discount);
 		}
 
+		// Update cart method
 		public void UpdateCart(Product product)
 		{
 			var existingItem = Cart.Find(item =>item.Product.Name == product.Name);
@@ -143,6 +175,8 @@ namespace ButikLAB2._1
 				Cart.Add(new CartItem(product, 1));
 			}
 		}
+
+
 
 		//CheckOut method
 
@@ -182,7 +216,7 @@ namespace ButikLAB2._1
 			if(confirmation == "yes")
 			{
 				Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Thank you for shopping with Lush Lucks!");
+                Console.WriteLine("Thank you for shopping with Lush Locks!");
 				Console.ResetColor();
 				Cart.Clear();
             }
