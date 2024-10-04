@@ -18,16 +18,11 @@ namespace ButikLAB2._1
 	{
 		private string _name;
 		private string _Password;
-
-		//Cart property
-
 		private List<CartItem> _cart;
 		public List<CartItem> Cart { get { return _cart; } }
 
 		public MembershipLevel Level { get; private set; }
 		public int Points { get; private set; }
-
-
 
 
 		public Customer(string name, string password, int points = 0)
@@ -68,7 +63,7 @@ namespace ButikLAB2._1
 			Console.ForegroundColor = ConsoleColor.Magenta;
 			Console.WriteLine("Lush Locks");
 			Console.ResetColor();
-			Console.WriteLine("Please log in\nEnter your username:");
+			Console.WriteLine("Enter your username:");
 			string userName = Console.ReadLine();
 
 			Console.WriteLine("Enter your password:");
@@ -89,22 +84,79 @@ namespace ButikLAB2._1
 		}
 
 		//Method to register a customer
-		public static void RegisterCustomer(List<Customer> customers, List<Product>products)
+		public static void RegisterCustomer(List<Customer> customers, List<Product>products, string filePath )
 		{
 			Console.ForegroundColor = ConsoleColor.Magenta;
 			Console.WriteLine("Lush Locks");
 			Console.ResetColor();
-			Console.WriteLine("To become a member create an account.\nEnter your username:");
-			string userName = Console.ReadLine();
+			Console.WriteLine("To become a member create an account.");
 
-			Console.WriteLine("Enter your password:");
-			string userPassword = Console.ReadLine();
+			string userName;
+			string userPassword;
+			do
+			{
+				Console.WriteLine("Enter your username:");
+				userName = Console.ReadLine();
+
+				if (string.IsNullOrEmpty(userName))
+				{
+					Console.WriteLine("Username cannot be empty. Please enter a valid username");
+				}
+			} while (string.IsNullOrEmpty(userName));
+
+			do
+			{
+                Console.WriteLine("Enter your password:");
+				userPassword = Console.ReadLine();
+
+				if (string.IsNullOrEmpty(userPassword))
+				{
+                    Console.WriteLine("Password cannot be empty. Please enter a valid password.");
+                }
+            }while(string.IsNullOrEmpty(userPassword));
 
 			var newCustomer = new Customer(userName, userPassword, points: 0);
-			customers.Add(new Customer(userName, userPassword));
-			Console.WriteLine("Successfully registered! Press enter to go back to the main menu.");
-			Console.ReadKey();
+			customers.Add(newCustomer);
+			SaveCustomers(filePath, customers);
 
+			Console.ForegroundColor= ConsoleColor.Green;
+            Console.WriteLine("Successfully registered! Press enter to go back to the main menu.");
+			Console.ResetColor();
+			Console.ReadKey();
+        }
+		// load customers
+		public static List<Customer> LoadCustomers(string filePath)
+		{
+			var customers = new List<Customer>();
+			if (File.Exists(filePath))
+			{
+				foreach(var line in File.ReadAllLines(filePath))
+				{
+					var parts = line.Split(',');
+					if(parts.Length == 3)
+					{
+						var name = parts[0];
+						var password = parts[1];
+						var points =int.Parse(parts[2]);
+
+						customers.Add(new Customer(name, password, points));
+					}
+				}
+			}
+			return customers;
+		}
+
+		//save customers
+
+		public static void SaveCustomers(string filePath, List<Customer> customers)
+		{
+			using (var writer = new StreamWriter(filePath))
+			{
+				foreach(var customer in customers)
+				{
+					writer.WriteLine($"{customer.Name},{customer.Password},{customer.Points}");
+				}
+			}
 		}
 
 		//Cart view method
@@ -215,7 +267,7 @@ namespace ButikLAB2._1
 
 		//CheckOut method
 
-		public void CheckOut()
+		public void CheckOut(string customersFilePath, List<Customer> customers)
 		{
 			Console.Clear();
 			Console.ForegroundColor= ConsoleColor.Magenta;
@@ -262,6 +314,8 @@ namespace ButikLAB2._1
 				int pointEarned = (int)(finalPrice / 10);
 				AddPoints(pointEarned);
 				Cart.Clear();
+
+				SaveCustomers(customersFilePath, customers);
             }
 			else
 			{

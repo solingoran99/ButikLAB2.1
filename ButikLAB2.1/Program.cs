@@ -4,6 +4,8 @@
 	{
 		static void Main(string[] args)
 		{
+
+			const string customersFilePath = "customers.txt";
 			//List of products
 
 			List<Product> products = new List<Product>
@@ -14,15 +16,20 @@
 				new Product("Lush Scalp Serum", "Repair hair serum", 99.00),
 				new Product("Lush Hair Oil", "Strengthensand adds shine for quick growth", 269.00)
 			};
-			// list of customers
-			List<Customer> customers = new List<Customer>
+
+			List<Customer> customers = Customer.LoadCustomers(customersFilePath);
+
+			if (customers.Count == 0)
 			{
-				new Customer("Knatte", "123", points: 150),
-				new Customer("Fnatte", "321", points: 260),
-				new Customer("Tjatte", "213", points: 540)
-			};
+				customers = new List<Customer>
+				{
+					new Customer("Knatte", "123", points: 150),
+					new Customer("Fnatte", "321", points: 260),
+					new Customer("Tjatte", "213", points: 540)
+				};
+			}
 
-
+			
 
 			bool running = true;
 			Customer loggedInCustomer = null;
@@ -47,12 +54,12 @@
 							loggedInCustomer = Customer.Login(customers);
 							if (loggedInCustomer != null)
 							{
-								ShoppingMenu(loggedInCustomer, products);
+								ShoppingMenu(loggedInCustomer, products, customers, customersFilePath);
 							}
 							break;
 						case 2:
 							Console.Clear();
-							Customer.RegisterCustomer(customers, products);
+							Customer.RegisterCustomer(customers, products, customersFilePath);
 							break;
 						case 3:
 							running = false;
@@ -72,7 +79,7 @@
 
 		}
 		//Shopping menu method
-		public static void ShoppingMenu(Customer customer, List<Product> products)
+		public static void ShoppingMenu(Customer customer, List<Product> products, List<Customer> customers, string customersFilePath)
 		{
 			bool shopping = true;
 
@@ -107,7 +114,7 @@
 							break;
 
 						case 4:
-							customer.CheckOut();
+							customer.CheckOut(customersFilePath, customers);
 							break;
 
 						case 5:
