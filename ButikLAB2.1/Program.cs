@@ -82,7 +82,7 @@
 				Console.ForegroundColor = ConsoleColor.Magenta;
 				Console.WriteLine("Lush Locks");
 				Console.ResetColor();
-				Console.WriteLine("1.Shop\n2.View Cart\n3.Check Out\n4.Log Out");
+				Console.WriteLine("1.Profile\n2.Shop\n3.View Cart\n4.Check Out\n5.Log Out");
 
 
 				if (int.TryParse(Console.ReadLine(), out int shoppingChoice))
@@ -90,18 +90,27 @@
 					switch (shoppingChoice)
 					{
 						case 1:
+							Console.Clear();
+							Console.ForegroundColor = ConsoleColor.Magenta;
+							Console.WriteLine("Lush Locks - Profile");
+							Console.ResetColor();
+                            Console.WriteLine(customer.ToString());
+                            Console.WriteLine("Press enter to go back to the menu.");
+							Console.ReadKey();
+                            break;
+						case 2:
 							ShoppingLoop(customer, products);
 							break;
 
-						case 2:
+						case 3:
 							customer.ViewCart();
 							break;
 
-						case 3:
+						case 4:
 							customer.CheckOut();
 							break;
 
-						case 4:
+						case 5:
 							shopping = false;
 							break;
 

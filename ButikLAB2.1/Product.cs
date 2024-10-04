@@ -30,7 +30,7 @@ namespace ButikLAB2._1
 			
 			for (int i  = 0; i < products.Count; i++)
 			{
-                Console.WriteLine($"{i+1}. {products[i].Name}: {products[i].Description} (Price:){products[i].Price}Kr");
+                Console.WriteLine($"{i+1}. {products[i].Name}: {products[i].Description} (Price:{products[i].Price}Kr)");
             }
 		}
 	}

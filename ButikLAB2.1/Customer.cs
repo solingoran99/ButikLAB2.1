@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace ButikLAB2._1
 {
 	public enum MembershipLevel
 	{
+		None,
 		Bronze,
 		Silver,
 		Gold
@@ -28,13 +30,13 @@ namespace ButikLAB2._1
 
 
 
-		public Customer(string name, string password, MembershipLevel level = MembershipLevel.Bronze, int points = 0)
+		public Customer(string name, string password, int points = 0)
 		{
 			Name = name;
 			Password = password;
 			_cart = new List<CartItem>();
-			Level = level;
 			Points = points;
+			UpdateMembershipLevel();	
 		}
 
 		public string Name
@@ -98,6 +100,7 @@ namespace ButikLAB2._1
 			Console.WriteLine("Enter your password:");
 			string userPassword = Console.ReadLine();
 
+			var newCustomer = new Customer(userName, userPassword, points: 0);
 			customers.Add(new Customer(userName, userPassword));
 			Console.WriteLine("Successfully registered! Press enter to go back to the main menu.");
 			Console.ReadKey();
@@ -122,8 +125,9 @@ namespace ButikLAB2._1
 				{
 					Console.WriteLine($"-{cartItem.Product.Name}: {cartItem.Quantity}x ({cartItem.Product.Price:F2}Kr per item) = {cartItem.TotalItemPrice():F2}Kr");
 				}
+				var (finalPrice, _) = TotalPrice();
 				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine($"\nTotal Price: {TotalPrice()}kr");
+				Console.WriteLine($"\nTotal Price: {finalPrice}kr");
 				Console.ResetColor();
 			}
 			Console.WriteLine("Press enter to go back to the menu.");
@@ -132,7 +136,7 @@ namespace ButikLAB2._1
 
 		//Calculate total method
 
-		public double TotalPrice()
+		public (double finalPrice, double discountAmount) TotalPrice()
 		{
 			double totalPrice = 0;
 
@@ -158,7 +162,10 @@ namespace ButikLAB2._1
 					discount = 0.0;
 					break;
 			}
-			return totalPrice * (1 - discount);
+			double discountAmount = totalPrice * discount;
+			double finalPrice = totalPrice - discountAmount;
+
+			return (finalPrice, discountAmount);
 		}
 
 		// Update cart method
@@ -176,6 +183,34 @@ namespace ButikLAB2._1
 			}
 		}
 
+		private void AddPoints(int pointsToAdd)
+		{
+			Points += pointsToAdd;
+			UpdateMembershipLevel();
+		}
+
+		//Method to adjust membership
+
+		private void UpdateMembershipLevel()
+		{
+			
+			if (Points >= 510)
+			{
+				Level = MembershipLevel.Gold;
+			}
+			else if (Points >= 250)
+			{
+				Level = MembershipLevel.Silver;
+			}
+			else if (Points >= 50)
+			{
+				Level = MembershipLevel.Bronze;
+			}
+			else
+			{
+				Level = MembershipLevel.None;
+			}
+		}
 
 
 		//CheckOut method
@@ -198,9 +233,14 @@ namespace ButikLAB2._1
 
 			Console.WriteLine(this.ToString());
 
-			double totalPrice = TotalPrice();
+			var (finalPrice, discountAmount) = TotalPrice();
+			double totalPrice = finalPrice + discountAmount;
+			double discountPercentage = (discountAmount / totalPrice) * 100;
+			
 			Console.ForegroundColor = ConsoleColor.Red;
-			Console.WriteLine($"\nTotal Price: {totalPrice}Kr");
+			Console.WriteLine($"\nTotal Price: {finalPrice:F2}Kr");
+			Console.WriteLine($"Discount: {discountAmount:F2} Kr ({discountPercentage}%)");
+			Console.WriteLine($"Final Price: {finalPrice:F2} Kr");
 			Console.ResetColor();
 
 			string confirmation;
@@ -218,6 +258,9 @@ namespace ButikLAB2._1
 				Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Thank you for shopping with Lush Locks!");
 				Console.ResetColor();
+
+				int pointEarned = (int)(finalPrice / 10);
+				AddPoints(pointEarned);
 				Cart.Clear();
             }
 			else
@@ -236,6 +279,8 @@ namespace ButikLAB2._1
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine($"Name: {Name}");
 			sb.AppendLine($"Password: {Password}");
+			sb.AppendLine($"Membership Level: {Level}");
+			sb.AppendLine($"Points: {Points}");
 			sb.AppendLine("Shopping Cart:");
 
 			if (Cart.Count == 0)
