@@ -1,7 +1,16 @@
-﻿namespace ButikLAB2._1
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace ButikLAB2._1
 {
+	public enum Currency
+	{
+		SEK,
+		USD,
+		EUR
+	}
 	public class Program
 	{
+		private static Currency currentCurrency = Currency.SEK;
 		static void Main(string[] args)
 		{
 
@@ -77,7 +86,11 @@
 
 			}
 
+			
+
 		}
+
+
 		//Shopping menu method
 		public static void ShoppingMenu(Customer customer, List<Product> products, List<Customer> customers, string customersFilePath)
 		{
@@ -135,6 +148,37 @@
 			}
 		}
 
+		public static void ChangeCurrency()
+		{
+			Console.Clear();
+            Console.WriteLine("Select Currency");
+			Console.WriteLine("1. SEK (Swedish Krona)\n2. USD (US Dollar)\n3. EUR (Euro)\nEnter your choice:");
+
+			string input = Console.ReadLine();
+			int userChoice;
+			if (int.TryParse(input, out userChoice))
+			{
+				switch (userChoice)
+				{
+					case 1:
+						currentCurrency = Currency.SEK;
+						break;
+					case 2:
+						currentCurrency = Currency.EUR;
+						break;
+					case 3:
+						currentCurrency = Currency.USD;
+						break;
+					default:
+						Console.WriteLine("Invalid choice. Set to SEK.");
+						currentCurrency = Currency.SEK;
+						break;
+				}
+				Console.WriteLine($"Currency changed to: {currentCurrency}");
+				System.Threading.Thread.Sleep(1500);
+			}
+		}
+
 		//LOOP for shoppinng
 		public static void ShoppingLoop(Customer customer, List<Product> products)
 		{
@@ -146,7 +190,7 @@
 				Console.ForegroundColor = ConsoleColor.Magenta;
 				Console.WriteLine("Lush Locks");
 				Console.ResetColor();
-				Product.DisplayProducts(products);
+				Product.DisplayProducts(products, currentCurrency);
 
 				Console.WriteLine("\nEnter the number of the product to add to your cart:\nType 'exit' to stop shopping.");
 				string productInput = Console.ReadLine();
@@ -177,6 +221,8 @@
 
 			}
 		}
+
+
 	}
 }
 
