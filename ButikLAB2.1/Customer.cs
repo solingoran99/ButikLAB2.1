@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -244,8 +245,23 @@ namespace ButikLAB2._1
 			}
 		}
 
-		private void AddPoints(int pointsToAdd)
+		private void AddPoints(double finalPrice, Currency currency)
 		{
+			int pointsToAdd = 0;
+
+			switch (currency)
+			{
+				case Currency.SEK:
+					pointsToAdd = (int)(finalPrice / 10);
+					break;
+				case Currency.EUR:
+					pointsToAdd = (int)(finalPrice / 0.88);
+					break;
+				case Currency.USD:
+					pointsToAdd = (int)(finalPrice / 0.94);
+					break;
+			}
+
 			Points += pointsToAdd;
 			UpdateMembershipLevel();
 		}
@@ -320,8 +336,7 @@ namespace ButikLAB2._1
                 Console.WriteLine("Thank you for shopping with Lush Locks!");
 				Console.ResetColor();
 
-				int pointEarned = (int)(finalPrice / 10);
-				AddPoints(pointEarned);
+				AddPoints(finalPrice, currenCurrency);
 				Cart.Clear();
 
 				SaveCustomers(customersFilePath, customers);
