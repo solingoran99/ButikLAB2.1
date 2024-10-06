@@ -23,7 +23,7 @@ namespace ButikLAB2._1
 				new Product("Lush Conditioner", "Nourishes and hydrates for smooth, manageable hair.", 112.00),
 				new Product("Lush Hair Mask", "Overnight hair treatment for frizz control and shine", 219.20),
 				new Product("Lush Scalp Serum", "Repair hair serum", 99.00),
-				new Product("Lush Hair Oil", "Strengthensand adds shine for quick growth", 269.00)
+				new Product("Lush Hair Oil", "Strengthens and adds shine for quick growth", 269.00)
 			};
 
 			List<Customer> customers = Customer.LoadCustomers(customersFilePath);

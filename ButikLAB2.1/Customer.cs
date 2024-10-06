@@ -17,46 +17,34 @@ namespace ButikLAB2._1
 	}
 	public class Customer
 	{
-		private string _name;
-		private string _Password;
-		private List<CartItem> _cart;
-		public List<CartItem> Cart { get { return _cart; } }
-
+		public string Name { get; private set; }
+		private string Password { get; set; }
+		public List<CartItem> Cart {  get; private set; }
+		public int Points { get; set; }
 		public MembershipLevel Level { get; private set; }
-		public int Points { get; private set; }
 
 
 		public Customer(string name, string password, int points = 0)
 		{
+
+			if (string.IsNullOrEmpty(name))
+				throw new ArgumentNullException("Customer name cannot be empty or null.");
+			if(string.IsNullOrEmpty(password))
+			    throw new ArgumentNullException("Password cannot be empty or null.");
+
 			Name = name;
 			Password = password;
-			_cart = new List<CartItem>();
+			Cart = new List<CartItem>();
 			Points = points;
-			UpdateMembershipLevel();	
+			Level = MembershipLevel.Zero;
 		}
 
-		public string Name
+		public bool verifyPassword(string password)
 		{
-			get => _name; set
-			{
-				if (string.IsNullOrEmpty(value))
-				{
-					throw new InvalidOperationException("Customer name cannot be empty.");
-				}
-				_name = value;
-			}
+			return Password == password;
 		}
-		public string Password
-		{
-			get => _Password; set
-			{
-				if (string.IsNullOrEmpty(value))
-				{
-					throw new InvalidOperationException("Password cannot be empty");
-				}
-				_Password = value;
-			}
-		}
+
+
 
 		// Customer login method
 		public static Customer Login(List<Customer> customers)
