@@ -102,7 +102,7 @@ namespace ButikLAB2._1
 				Console.ForegroundColor = ConsoleColor.Magenta;
 				Console.WriteLine("Lush Locks");
 				Console.ResetColor();
-				Console.WriteLine("1.Profile\n2.Shop\n3.View Cart\n4.Check Out\n5.Log Out");
+				Console.WriteLine("1.Profile\n2.Shop\n3.View Cart\n4.Check Out\n5.Change Currency\n6.Log Out");
 
 
 				if (int.TryParse(Console.ReadLine(), out int shoppingChoice))
@@ -123,14 +123,17 @@ namespace ButikLAB2._1
 							break;
 
 						case 3:
-							customer.ViewCart();
+							customer.ViewCart(currentCurrency);
 							break;
 
 						case 4:
-							customer.CheckOut(customersFilePath, customers);
+							customer.CheckOut(customersFilePath, customers, currentCurrency);
+							break;
+						case 5:
+							ChangeCurrency();
 							break;
 
-						case 5:
+						case 6:
 							shopping = false;
 							break;
 
@@ -152,7 +155,7 @@ namespace ButikLAB2._1
 		{
 			Console.Clear();
             Console.WriteLine("Select Currency");
-			Console.WriteLine("1. SEK (Swedish Krona)\n2. USD (US Dollar)\n3. EUR (Euro)\nEnter your choice:");
+			Console.WriteLine("1. SEK (Swedish Krona)\n2. EUR (EURO)\n3. USD (US Dollar)\nEnter your choice:");
 
 			string input = Console.ReadLine();
 			int userChoice;
@@ -174,7 +177,9 @@ namespace ButikLAB2._1
 						currentCurrency = Currency.SEK;
 						break;
 				}
+				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine($"Currency changed to: {currentCurrency}");
+				Console.ResetColor();
 				System.Threading.Thread.Sleep(1500);
 			}
 		}

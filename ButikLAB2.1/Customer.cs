@@ -161,11 +161,11 @@ namespace ButikLAB2._1
 
 		//Cart view method
 
-		public void ViewCart()
+		public void ViewCart(Currency currentCurrency)
 		{
 			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Magenta;
-			Console.WriteLine("Your shopping cart:");
+			Console.WriteLine("Lush Locks - Your Cart");
 			Console.ResetColor();
 			if (Cart.Count == 0)
 			{
@@ -173,13 +173,18 @@ namespace ButikLAB2._1
 			}
 			else
 			{
+				decimal finalTotal = 0;
 				foreach (var cartItem in Cart)
 				{
-					Console.WriteLine($"-{cartItem.Product.Name}: {cartItem.Quantity}x ({cartItem.Product.Price:F2}Kr per item) = {cartItem.TotalItemPrice():F2}Kr");
+					decimal pricePerItem = ConvertPrice(cartItem.Product.Price, currentCurrency);
+					decimal totalItemPrice = pricePerItem * cartItem.Quantity;
+					Console.WriteLine($"-{cartItem.Product.Name}: {cartItem.Quantity}x ({pricePerItem:F2} {currentCurrency} per item) = {totalItemPrice:F2} {currentCurrency}");
+
+					finalTotal += totalItemPrice;
 				}
-				var (finalPrice, _) = TotalPrice();
+				var finalPrice = finalTotal;
 				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine($"\nTotal Price: {finalPrice}kr");
+				Console.WriteLine($"\nTotal Price: {finalPrice:F2}{currentCurrency}");
 				Console.ResetColor();
 			}
 			Console.WriteLine("Press enter to go back to the menu.");
@@ -188,14 +193,18 @@ namespace ButikLAB2._1
 
 		//Calculate total method
 
-		public (double finalPrice, double discountAmount) TotalPrice()
+		public (double finalPrice, double discountAmount) TotalPrice(Currency currentCurrency)
 		{
-			double totalPrice = 0;
+			double conversionRate = Product.GetCurrencyConversionRate(currentCurrency);
+
+			double totalPriceInSek = 0;
 
 			foreach (var cartItem in Cart)
 			{
-				totalPrice += cartItem.TotalItemPrice();
+				totalPriceInSek += cartItem.TotalItemPrice();
 			}
+
+			double totalPrice = totalPriceInSek * conversionRate;
 
 			double discount = 0;
 
@@ -267,7 +276,7 @@ namespace ButikLAB2._1
 
 		//CheckOut method
 
-		public void CheckOut(string customersFilePath, List<Customer> customers)
+		public void CheckOut(string customersFilePath, List<Customer> customers, Currency currenCurrency)
 		{
 			Console.Clear();
 			Console.ForegroundColor= ConsoleColor.Magenta;
@@ -285,14 +294,14 @@ namespace ButikLAB2._1
 
 			Console.WriteLine(this.ToString());
 
-			var (finalPrice, discountAmount) = TotalPrice();
+			var (finalPrice, discountAmount) = TotalPrice(currenCurrency);
 			double totalPrice = finalPrice + discountAmount;
 			double discountPercentage = (discountAmount / totalPrice) * 100;
 			
 			Console.ForegroundColor = ConsoleColor.Red;
-			Console.WriteLine($"\nTotal Price: {finalPrice:F2}Kr");
-			Console.WriteLine($"Discount: {discountAmount:F2} Kr ({discountPercentage}%)");
-			Console.WriteLine($"Final Price: {finalPrice:F2} Kr");
+			Console.WriteLine($"\nTotal Price: {totalPrice:F2} {currenCurrency}");
+			Console.WriteLine($"Discount: {discountAmount:F2} ({discountPercentage:F2}%)");
+			Console.WriteLine($"Final Price: {finalPrice:F2} {currenCurrency}");
 			Console.ResetColor();
 
 			string confirmation;
@@ -352,6 +361,13 @@ namespace ButikLAB2._1
 
             
         }
+
+		private static decimal ConvertPrice(double priceInSEK, Currency currency)
+		{
+			double conversionRate = Product.GetCurrencyConversionRate(currency);
+			return (decimal)(priceInSEK * conversionRate);
+		}
+
 
 
 	}
