@@ -38,8 +38,6 @@ namespace ButikLAB2._1
 				};
 			}
 
-			
-
 			bool running = true;
 			Customer loggedInCustomer = null;
 			while (running)
@@ -76,20 +74,14 @@ namespace ButikLAB2._1
 						default:
 							Console.WriteLine("Invalid choice. Choose 1, 2 or 3.");
 							break;
-					}
-					
+					}					
 				}
 				else
 				{
 					Console.WriteLine("OOPS error! Please enter a number.");
 				}
-
-			}
-
-			
-
+			}	
 		}
-
 
 		//Shopping menu method
 		public static void ShoppingMenu(Customer customer, List<Product> products, List<Customer> customers, string customersFilePath)

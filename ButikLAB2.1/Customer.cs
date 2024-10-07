@@ -117,20 +117,27 @@ namespace ButikLAB2._1
 		public static List<Customer> LoadCustomers(string filePath)
 		{
 			var customers = new List<Customer>();
-			if (File.Exists(filePath))
+			try
 			{
-				foreach(var line in File.ReadAllLines(filePath))
+				if (File.Exists(filePath))
 				{
-					var parts = line.Split(',');
-					if(parts.Length == 3)
+					foreach (var line in File.ReadAllLines(filePath))
 					{
-						var name = parts[0];
-						var password = parts[1];
-						var points =int.Parse(parts[2]);
+						var parts = line.Split(',');
+						if (parts.Length == 3)
+						{
+							var name = parts[0];
+							var password = parts[1];
+							var points = int.Parse(parts[2]);
 
-						customers.Add(new Customer(name, password, points));
+							customers.Add(new Customer(name, password, points));
+						}
 					}
 				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error loading customers: {ex.Message}");
 			}
 			return customers;
 		}
@@ -364,6 +371,8 @@ namespace ButikLAB2._1
 
             
         }
+
+		//convert price method
 
 		private static decimal ConvertPrice(double priceInSEK, Currency currency)
 		{
