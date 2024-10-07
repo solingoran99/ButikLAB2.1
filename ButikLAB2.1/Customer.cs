@@ -64,7 +64,7 @@ namespace ButikLAB2._1
 				Console.WriteLine("Lush Locks");
 				Console.ResetColor();
 
-				Console.WriteLine("Type 'exit' to go back to the main menu.");
+				Console.WriteLine("(Type 'exit' to go back to the main menu.)");
 				Console.WriteLine("Enter your username:");
 				userName = Console.ReadLine();
 
@@ -117,7 +117,7 @@ namespace ButikLAB2._1
 			Console.ForegroundColor = ConsoleColor.Magenta;
 			Console.WriteLine("Lush Locks");
 			Console.ResetColor();
-			Console.WriteLine("To become a member create an account.");
+			Console.WriteLine("(Type 'exit' to go back to the main menu)\nTo become a member create an account.\n");
 
 			string userName;
 			string userPassword;
@@ -125,6 +125,11 @@ namespace ButikLAB2._1
 			{
 				Console.WriteLine("Enter your username:");
 				userName = Console.ReadLine();
+
+				if (userName.ToLower().Trim() == "exit")
+				{
+					return;
+				}
 
 				if (string.IsNullOrEmpty(userName))
 				{
@@ -136,6 +141,11 @@ namespace ButikLAB2._1
 			{
                 Console.WriteLine("Enter your password:");
 				userPassword = Console.ReadLine();
+
+				if (userPassword.ToLower().Trim() == "exit")
+				{
+					return;
+				}
 
 				if (string.IsNullOrEmpty(userPassword))
 				{
