@@ -64,11 +64,23 @@ namespace ButikLAB2._1
 				Console.WriteLine("Lush Locks");
 				Console.ResetColor();
 
+				Console.WriteLine("Type 'exit' to go back to the main menu.");
 				Console.WriteLine("Enter your username:");
 				userName = Console.ReadLine();
 
-                Console.WriteLine("Enter your password:");
+				if (userName.ToLower().Trim() == "exit")
+				{
+					return null; 
+				}
+
+				Console.WriteLine("Enter your password:");
 				userPassword = Console.ReadLine();
+
+
+				if (userPassword.ToLower().Trim() == "exit")
+				{
+					return null;
+				}
 
 				loggedInCustomer = customers.Find(c => c.Name == userName);
 
