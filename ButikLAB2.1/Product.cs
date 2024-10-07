@@ -29,7 +29,7 @@ namespace ButikLAB2._1
 			string currencySymbol = GetCurrencySymbol(currency);
 
 			Console.ForegroundColor = ConsoleColor.Magenta;
-			Console.WriteLine("Lush Locks - products:");
+			Console.WriteLine("Lush Locks - products");
 			Console.ResetColor();
 			
 			for (int i  = 0; i < products.Count; i++)

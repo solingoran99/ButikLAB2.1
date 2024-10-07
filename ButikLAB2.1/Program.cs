@@ -179,9 +179,6 @@ namespace ButikLAB2._1
 			while (continueShopping)
 			{
 				Console.Clear();
-				Console.ForegroundColor = ConsoleColor.Magenta;
-				Console.WriteLine("Lush Locks");
-				Console.ResetColor();
 				Product.DisplayProducts(products, currentCurrency);
 
 				Console.WriteLine("\nEnter the number of the product to add to your cart:\nType 'exit' to stop shopping.");
