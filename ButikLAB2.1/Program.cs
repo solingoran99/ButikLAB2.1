@@ -19,6 +19,7 @@ namespace ButikLAB2._1
 				new Product("Lush Scalp Serum", "Repair hair serum", 99.00),
 				new Product("Lush Hair Oil", "Strengthens and adds shine for quick growth", 269.00)
 			};
+			//List of customers
 
 			List<Customer> customers = Customer.LoadCustomers(customersFilePath);
 
@@ -31,7 +32,6 @@ namespace ButikLAB2._1
 					new Customer("Tjatte", "213", points: 540)
 				};
 			}
-
 			bool running = true;
 			Customer loggedInCustomer = null;
 			while (running)
@@ -44,7 +44,6 @@ namespace ButikLAB2._1
 				Console.WriteLine("1.Log in\n2.Become a member\n3.Exit\nEnter the corresponding number:");
 				string userInput = Console.ReadLine();
 				int userChoice;
-
 
 				if (int.TryParse(userInput, out userChoice))
 				{    
@@ -126,10 +125,8 @@ namespace ButikLAB2._1
 						default:
 							Console.WriteLine("Invalid choice");
 							break;
-
 					}
 				}
-
 				else
 				{
 					Console.WriteLine("Invalid, enter a number 1-4. ");
@@ -174,7 +171,7 @@ namespace ButikLAB2._1
 			}
 		}
 
-		//LOOP for shoppinng
+		//LOOP for shopping
 		public static void ShoppingLoop(Customer customer, List<Product> products)
 		{
 			bool continueShopping = true;
