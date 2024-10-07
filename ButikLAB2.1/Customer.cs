@@ -36,7 +36,7 @@ namespace ButikLAB2._1
 			Password = password;
 			Cart = new List<CartItem>();
 			Points = points;
-			Level = MembershipLevel.Zero;
+			UpdateMembershipLevel();
 		}
 
 		public bool verifyPassword(string password)
@@ -52,24 +52,49 @@ namespace ButikLAB2._1
 			Console.ForegroundColor = ConsoleColor.Magenta;
 			Console.WriteLine("Lush Locks");
 			Console.ResetColor();
-			Console.WriteLine("Enter your username:");
-			string userName = Console.ReadLine();
 
-			Console.WriteLine("Enter your password:");
-			string userPassword = Console.ReadLine();
+			string userName;
+			string userPassword;
+			Customer loggedInCustomer = null;
 
-			Customer loggedInCustomer = customers.Find(c => c.Name == userName && c.Password == userPassword);
-
-			if (loggedInCustomer != null)
+			while (true)
 			{
-				Console.WriteLine($"Welcome, {loggedInCustomer.Name}");
-				return loggedInCustomer;
+				Console.Clear();
+				Console.ForegroundColor = ConsoleColor.Magenta;
+				Console.WriteLine("Lush Locks");
+				Console.ResetColor();
+
+				Console.WriteLine("Enter your username:");
+				userName = Console.ReadLine();
+
+                Console.WriteLine("Enter your password:");
+				userPassword = Console.ReadLine();
+
+				loggedInCustomer = customers.Find(c => c.Name == userName);
+
+				if(loggedInCustomer == null)
+				{
+					Console.WriteLine("Customer not found. Press Enter to return to the main menu to register.");
+					Console.ReadKey();
+					return null;
+					
+					
+				}
+				if (!loggedInCustomer.verifyPassword(userPassword))
+				{
+					Console.Clear();
+					Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid password. Please try again. . .");
+					Console.ResetColor();
+					System.Threading.Thread.Sleep(1500);
+					continue;
+				}
+				else
+				{
+					return loggedInCustomer;
+				}
 			}
-			else
-			{
-				Console.WriteLine("Invalid username or password. Please try again.");
-				return null;
-			}
+
 		}
 
 		//Method to register a customer
@@ -130,7 +155,9 @@ namespace ButikLAB2._1
 							var password = parts[1];
 							var points = int.Parse(parts[2]);
 
-							customers.Add(new Customer(name, password, points));
+							var customer = new Customer(name, password, points);
+							customer.UpdateMembershipLevel();
+							customers.Add(customer);
 						}
 					}
 				}
@@ -303,7 +330,7 @@ namespace ButikLAB2._1
 				return;
             }
 
-			Console.WriteLine(this.ToString());
+			Console.WriteLine(this.ToString(currenCurrency));
 
 			var (finalPrice, discountAmount) = TotalPrice(currenCurrency);
 			double totalPrice = finalPrice + discountAmount;
@@ -332,6 +359,7 @@ namespace ButikLAB2._1
 				Console.ResetColor();
 
 				AddPoints(finalPrice, currenCurrency);
+				UpdateMembershipLevel();
 				Cart.Clear();
 
 				SaveCustomers(customersFilePath, customers);
@@ -347,7 +375,7 @@ namespace ButikLAB2._1
 
 		//ToString() Method
 
-		public override string ToString()
+		public string ToString(Currency currentCurrency)
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine($"Name: {Name}");
@@ -362,9 +390,13 @@ namespace ButikLAB2._1
 			}
 			else
 			{
+				decimal totalCartValue = 0;
 				foreach (var cartItem in Cart)
 				{
-					sb.AppendLine($"- {cartItem.Product.Name}: {cartItem.Quantity}X ({cartItem.Product.Price:F2}Kr per item) = {cartItem.TotalItemPrice():F2}Kr");
+					decimal priceInCurrency = ConvertPrice(cartItem.Product.Price, currentCurrency);
+					decimal itemTotal = priceInCurrency * cartItem.Quantity;
+					totalCartValue += itemTotal;
+					sb.AppendLine($"- {cartItem.Product.Name}: {cartItem.Quantity}x ({priceInCurrency:F2} {currentCurrency} per item) = {(priceInCurrency * cartItem.Quantity):F2} {currentCurrency}");
 				}
 			}
 			return sb.ToString();
@@ -379,8 +411,5 @@ namespace ButikLAB2._1
 			double conversionRate = Product.GetCurrencyConversionRate(currency);
 			return (decimal)(priceInSEK * conversionRate);
 		}
-
-
-
 	}
 }

@@ -52,7 +52,7 @@ namespace ButikLAB2._1
 					return 1.0;
 			}
 		}
-		private static string GetCurrencySymbol (Currency currency)
+		public static string GetCurrencySymbol (Currency currency)
 		{
 			switch (currency)
 			{

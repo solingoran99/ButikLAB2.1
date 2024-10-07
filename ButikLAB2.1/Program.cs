@@ -2,12 +2,6 @@
 
 namespace ButikLAB2._1
 {
-	public enum Currency
-	{
-		SEK,
-		USD,
-		EUR
-	}
 	public class Program
 	{
 		private static Currency currentCurrency = Currency.SEK;
@@ -106,7 +100,7 @@ namespace ButikLAB2._1
 							Console.ForegroundColor = ConsoleColor.Magenta;
 							Console.WriteLine("Lush Locks - Profile");
 							Console.ResetColor();
-                            Console.WriteLine(customer.ToString());
+                            Console.WriteLine(customer.ToString(currentCurrency));
                             Console.WriteLine("Press enter to go back to the menu.");
 							Console.ReadKey();
                             break;
@@ -143,10 +137,14 @@ namespace ButikLAB2._1
 			}
 		}
 
+		//Method to change to currency
+
 		public static void ChangeCurrency()
 		{
 			Console.Clear();
-            Console.WriteLine("Select Currency");
+			Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("Lush Locks - Select Currency");
+			Console.ResetColor();
 			Console.WriteLine("1. SEK (Swedish Krona)\n2. EUR (EURO)\n3. USD (US Dollar)\nEnter your choice:");
 
 			string input = Console.ReadLine();
@@ -215,11 +213,15 @@ namespace ButikLAB2._1
 					Console.ResetColor();
 					System.Threading.Thread.Sleep(1500);
 				}
-
 			}
 		}
+	}
 
-
+	public enum Currency
+	{
+		SEK,
+		USD,
+		EUR
 	}
 }
 
