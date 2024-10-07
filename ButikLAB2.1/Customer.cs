@@ -86,7 +86,9 @@ namespace ButikLAB2._1
 
 				if(loggedInCustomer == null)
 				{
+					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine("Customer not found. Press Enter to return to the main menu to register.");
+					Console.ResetColor();
 					Console.ReadKey();
 					return null;
 					
