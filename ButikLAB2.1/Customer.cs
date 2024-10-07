@@ -148,7 +148,7 @@ namespace ButikLAB2._1
 			SaveCustomers(filePath, customers);
 
 			Console.ForegroundColor= ConsoleColor.Green;
-            Console.WriteLine("Successfully registered! Press enter to go back to the main menu.");
+            Console.WriteLine("Successfully registered! Press enter to go back to the main menu to log in.");
 			Console.ResetColor();
 			Console.ReadKey();
         }
